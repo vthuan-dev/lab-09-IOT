@@ -14,9 +14,9 @@ def load_data():
 def train_anomaly_detector(df):
     """Huấn luyện mô hình phát hiện bất thường"""
     model = IsolationForest(
-        n_estimators=100,  # số lượng cây trong rừng
-        contamination=0.05,  # tỉ lệ dữ liệu bất thường dự kiến
-        random_state=42  # đảm bảo kết quả reproducible
+        n_estimators=100,  # number of trees
+        contamination=0.05,  # expected proportion of outliers
+        random_state=42  # ensure reproducible results
     )
     model.fit(df)
     return model
@@ -24,19 +24,19 @@ def train_anomaly_detector(df):
 def detect_anomalies(model, df):
     """Phát hiện các điểm dữ liệu bất thường"""
     df['anomaly'] = model.predict(df)
-    return df[df['anomaly'] == -1]  # -1 chỉ ra điểm dữ liệu bất thường
+    return df[df['anomaly'] == -1]  # -1 indicates an outlier
 
 def main():
-    # Tải dữ liệu
+    # Load data
     df = load_data()
     
-    # Huấn luyện mô hình
+    # Train model
     model = train_anomaly_detector(df)
     
-    # Phát hiện bất thường
+    # Detect anomalies
     anomalies = detect_anomalies(model, df)
     
-    # In kết quả
+    # Print results
     if not anomalies.empty:
         print("Detected Anomalies in IoT Data:")
         print(anomalies)
